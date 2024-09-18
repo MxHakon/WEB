@@ -24,18 +24,25 @@
         #goButton {
             padding: 10px;
         }
+        #error {
+            color: red;
+            display: none;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
 
     <input type="text" id="urlBar" placeholder="Enter URL here" value="https://www.google.com">
     <button id="goButton">Go</button>
+    <div id="error">Unable to load the website. Please try a different URL.</div>
     <iframe id="browser" src="https://www.google.com"></iframe>
 
     <script>
         document.getElementById('goButton').addEventListener('click', function() {
             const url = document.getElementById('urlBar').value;
             const iframe = document.getElementById('browser');
+            const errorDiv = document.getElementById('error');
 
             // Check if the URL starts with http or https
             if (!url.startsWith('http://') && !url.startsWith('https://')) {
@@ -43,7 +50,16 @@
                 return;
             }
 
+            // Attempt to load the URL
             iframe.src = url;
+
+            // Show an error message if the site can't be loaded
+            iframe.onload = function() {
+                errorDiv.style.display = 'none'; // Hide error message if loaded successfully
+            };
+            iframe.onerror = function() {
+                errorDiv.style.display = 'block'; // Show error message if there is a problem
+            };
         });
     </script>
 
